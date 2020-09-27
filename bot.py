@@ -2,15 +2,12 @@ from irc.bot import SingleServerIRCBot
 from requests import get
 import config
 
-NAME ="deeplearningbot69"
-OWNER = "chrimsonred"
-
 class bot(SingleServerIRCBot):
     def __init__(self):
         self.HOST = "irc.chat.twitch.tv"
         self.PORT = 6667
-        USERNAME = NAME.lower()
-        self.CHANNEL = f"#{OWNER}"
+        USERNAME = config.NAME.lower()
+        self.CHANNEL = f"#{config.OWNER}"
 
         url = f"https://api.twitch.tv/kraken/users?login={USERNAME}"
         headers = {"Client-ID": config.CLIENT_ID, "Accept": "application/vnd.twitchtv.v5+json"}
