@@ -1,20 +1,22 @@
 from irc.bot import SingleServerIRCBot
 from requests import get
 import config
+import json
+#from lib import cmds
 
 class bot(SingleServerIRCBot):
     def __init__(self):
         self.HOST = "irc.chat.twitch.tv"
         self.PORT = 6667
-        USERNAME = config.NAME.lower()
+        self.USERNAME = config.NAME.lower()
         self.CHANNEL = f"#{config.OWNER}"
 
-        url = f"https://api.twitch.tv/kraken/users?login={USERNAME}"
+        url = f"https://api.twitch.tv/kraken/users?login={self.USERNAME}"
         headers = {"Client-ID": config.CLIENT_ID, "Accept": "application/vnd.twitchtv.v5+json"}
         resp = get(url, headers=headers).json()
         self.channel_id = resp["users"][0]["_id"]
 
-        super().__init__([(self.HOST, self.PORT, f"oauth:{config.TOKEN}")], USERNAME, USERNAME)
+        super().__init__([(self.HOST, self.PORT, f"oauth:{config.TOKEN}")], self.USERNAME, self.USERNAME)
 
     def on_welcome(self, cxn, event):
         for req in ("membership", "tags", "commands"):
@@ -27,6 +29,10 @@ class bot(SingleServerIRCBot):
         tags = {kvpair["key"]: kvpair["value"] for kvpair in event.tags}
         user = {"name": tags["display-name"], "id": tags["user-id"]}
         message = event.arguments[0]
+
+        if user["name"] != self.USERNAME:
+            with open('chat_file.txt', 'a') as outfile:
+                outfile.write((message) + '\n')
 
         print(f"Message from {user['name']}:{message}")
 
