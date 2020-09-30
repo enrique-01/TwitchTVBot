@@ -34,10 +34,10 @@ class bot(SingleServerIRCBot):
         message = event.arguments[0]
 
         if user["name"] != self.USERNAME:
-            with open('chat_file.txt', 'a') as outfile:
+            with open('chat_file.txt', 'a', encoding="utf-8") as outfile:
                 outfile.write(time_string + user['name'] + ': ' + message + '\n')
 
-        print(f"Message from {user['name']}:{message}")
+        #print(f"Message from {user['name']}:{message}")
 
     def send_message(self, message):
         self.connection.privmsg(self.CHANNEL, message)
