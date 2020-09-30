@@ -1,8 +1,9 @@
 from irc.bot import SingleServerIRCBot
 from requests import get
 import config
+import time
 import json
-#from lib import cmds
+
 
 class bot(SingleServerIRCBot):
     def __init__(self):
@@ -26,13 +27,15 @@ class bot(SingleServerIRCBot):
         self.send_message("Now online.")
 
     def on_pubmsg(self, cxn, event):
+        named_tuple = time.localtime()
+        time_string = time.strftime("%m/%d/%Y, %H:%M:%S ", named_tuple)
         tags = {kvpair["key"]: kvpair["value"] for kvpair in event.tags}
         user = {"name": tags["display-name"], "id": tags["user-id"]}
         message = event.arguments[0]
 
         if user["name"] != self.USERNAME:
             with open('chat_file.txt', 'a') as outfile:
-                outfile.write((message) + '\n')
+                outfile.write(time_string + user['name'] + ': ' + message + '\n')
 
         print(f"Message from {user['name']}:{message}")
 
