@@ -45,3 +45,4 @@ class bot(SingleServerIRCBot):
 if __name__ == "__main__":
     bot = bot()
     bot.start()
+#testing
