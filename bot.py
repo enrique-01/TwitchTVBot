@@ -2,6 +2,8 @@ from irc.bot import SingleServerIRCBot
 from requests import get
 import config
 import time
+import react
+
 import json
 
 
@@ -34,8 +36,9 @@ class bot(SingleServerIRCBot):
         message = event.arguments[0]
 
         if user["name"] != self.USERNAME:
+            react.process(bot, user, message)
             with open('chat_file.txt', 'a', encoding="utf-8") as outfile:
-                outfile.write(time_string + user['name'] + ': ' + message + '\n')
+                outfile.writelines(message + '\n')
 
         #print(f"Message from {user['name']}:{message}")
 
@@ -45,4 +48,3 @@ class bot(SingleServerIRCBot):
 if __name__ == "__main__":
     bot = bot()
     bot.start()
-#testing
