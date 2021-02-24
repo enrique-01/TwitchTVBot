@@ -8,3 +8,4 @@ To-Do
 Scrub data-text file
 ?
 
+Use premade gensim library to do word2vec vs doing it manually?
